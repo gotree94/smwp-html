@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>온도모니터링 시스템</title>
+    <style>
+        /* 전체 페이지 레이아웃 설정 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* HEADER, MAIN, TAIL 구획 스타일 */
+        header, main, footer {
+            padding: 20px;
+            text-align: center;
+        }
+
+        header {
+            background-color: #f1f1f1;
+        }
+
+        footer {
+            background-color: #f1f1f1;
+        }
+
+        main {
+            display: grid;
+            grid-template-rows: repeat(2, 1fr); /* 3개의 행을 균등하게 나누기 */
+            grid-template-columns: repeat(3, 1fr); /* 3개의 열을 균등하게 나누기 */
+            gap: 1px; /* 셀 간격 설정 */
+            border: 1px solid black; /* MAIN 구획의 외부 테두리 */
+            height: 80vh; /* 화면의 80% 높이 */
+            width: 100%; /* 전체 너비 */
+        }
+
+        /* 각 MAIN BODY 셀 스타일 */
+        main div {
+            border: 1px solid black; /* 셀 구분을 위한 검은 선 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+        }
+
+        .my_btn {
+            background-color: darkgray;
+            color: black;
+            border: none;
+            font-size: 20px;
+            padding: 30px 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>온도모니터링 시스템</h1>
+        <br>
+        <h2>SMWP(SMart factory Web Platform)</h2>
+    </header>
+
+    <main>
+        <div>
+            <div>
+                <h2>온도계화면</h2>
+                <img src="T54.png" alt="img 태그">
+            </div>
+        </div>
+        <div>
+            <h2>1분 단위 통계</h2></p>
+            <button class='my_btn'>
+                오름차순 조회
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class='my_btn'>
+                내림차순 조회
+            </button>
+        </div>
+        <div>
+            <h2>알람회수</h2>
+            <button class='my_btn'>
+                조    회                
+            </button> <br><br><br><br><br><br><br><br><br><br><br><br><br>
+            High Alarm<br>
+            Low Alarm<br>
+            마지막 알람 발생 시간<br>
+            High Alarm<br>
+            Low Alarm<br>
+        </div>
+        <div>
+            <h2>알람 램프</h2>
+
+        </div>
+        <div>
+            <h2>1분 차트</h2>
+
+        </div>
+        <div>
+            <h2>알람 통계 그래프</h2>
+
+        </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <h2>APT(Aws ProjecT)</h2>
+        <h3>충남인력개발원 천안인적자원개발센터</h3>
+    </footer>
+
+</body>
+</html>
