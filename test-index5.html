@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="60"> <!-- 60초마다 페이지 새로고침 -->
+    <title>온도 모니터링 시스템</title>
+    <!-- ECharts 라이브러리 추가 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5"></script>
+    <!-- jQuery 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* 기본 스타일 설정 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* TOP 영역 */
+        #top {
+            /* https://www.rapidtables.org/ko/web/color/html-color-codes.html */
+            /* background-color: #050b05; */
+            /* background-color:#228B22; */
+            background-color:#696969;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        /* 메인 콘텐츠 영역 (3x2 Grid) */
+        #main-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3개의 컬럼 */
+            grid-template-rows: repeat(2, 1fr);    /* 2개의 행 */
+            gap: 20px;
+            padding: 20px;
+            flex-grow: 1; /* 남은 공간을 차지 */
+        }
+
+        /* 각 구획 스타일 */
+        .chart-container {
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        /* TAIL 영역 */
+        #tail {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        /* 차트 크기 */
+        .chart {
+            width: 100%;
+            height: 350px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP 영역 -->
+    <div id="top">
+        온도 모니터링 시스템
+    </div>
+
+    <!-- 메인 콘텐츠 영역 (3x2 그리드) -->
+    <div id="main-content">
+		<div class="chart-container" style="background-color: #000; color: white;">
+			<div class="chart">
+				<!-- 온도 값 라벨 -->
+				<p style="text-align: left; font-size: 20px; padding-top: 1px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T54</p>
+
+				<!-- 온도 값 표시 -->
+				<p style="text-align: center; font-size: 30px; padding-top: 10px;">현재온도(PV): ##.# °C</p>
+
+				<!-- 텍스트 입력 창 2개 추가 -->
+				<div style="text-align: center; padding-top: 10px;">
+					<p style="text-align: center; font-size: 20px; padding-top: 1px;">
+						SV1
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						SV2</p>
+					<p>
+						<input type="text" id="input1" placeholder="SV 1" style="font-size: 18px; padding: 5px; margin: 5px; width: 100px; margin-right: 100px;">
+						<input type="text" id="input2" placeholder="SV 2" style="font-size: 18px; padding: 5px; margin: 5px; width: 100px;">
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="chart-container">
+			<div class="chart">
+				<!-- 첫 번째 버튼: 온도 값을 표시하는 버튼 -->
+				<p style="text-align: center; font-size: 20px; padding-top: 5px;">
+					<button style="font-size: 18px; padding: 5px; margin-right: 20px;">오름차순 정렬</button>
+					<button style="font-size: 18px; padding: 5px; margin-left: 20px;">내림차순 정렬</button>
+				</p>
+			</div> 
+		</div>
+
+        <div class="chart-container">
+			<div class="chart">
+				<!-- 첫 번째 버튼: 온도 값을 표시하는 버튼 -->
+				<p style="text-align: center; font-size: 20px;">
+					<button style="font-size: 18px; padding: 5px; width: 150px;">조    회</button>
+				</p>
+				<p style="text-align: left; font-size: 18px;">알람 회수</p>
+				<p style="text-align: center; font-size: 18px;">
+					<span style="margin-right: 100px;">High Alarm</span>
+					<span style="margin-right: 50px;">##</span>
+					<span style="margin-right: 50px;">회</span>
+				</p>
+				<p style="text-align: center; font-size: 18px;">
+					<span style="margin-right: 100px;">Low Alarm</span>
+					<span style="margin-right: 50px;">##</span>
+					<span style="margin-right: 50px;">회</span></p>
+				<p style="text-align: left; font-size: 18px;">마지막 알람 발생시간</p>
+				<p style="text-align: center; font-size: 18px;">
+					<span style="margin-right: 130px;">High Alarm</span>
+					<span style="margin-right: 40px;">##:##:##</span>
+				</p>
+				<p style="text-align: center; font-size: 18px; padding-top: 1px;">
+					<span style="margin-right: 130px;">Low Alarm</span>
+					<span style="margin-right: 40px;">##:##:##</span>
+				</p>
+			</div>
+        </div>
+        <div class="chart-container">
+            <div class="chart">
+				<center>
+                    <audio src="air-raid-siren-225303.mp3" controls></audio>
+                </center>
+			</div> <!-- 여기에 다른 차트 배치 가능 -->
+        </div>
+        <div class="chart-container">
+            <div id="main2" class="chart"></div> <!-- 선형 차트 -->
+        </div>
+        <div class="chart-container">
+            <div id="main3" class="chart"></div> <!-- 원형 차트 -->
+        </div>
+    </div>
+
+    <!-- TAIL 영역 -->
+    <div id="tail">
+        대시보드 하단 영역
+    </div>
+
+    <script type="text/javascript">
+        // 문서가 준비되면 AJAX 요청을 사용하여 데이터를 가져옴
+        $(document).ready(function() {
+            // 선형 차트 (최근 20개의 데이터)
+            $.ajax({
+                url: 'http://localhost:3000/api/recent',  // 최근 20개 데이터 요청
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // 서버로부터 받은 데이터에서 시간(TIME)과 PV 값 추출
+                    var times = data.map(item => item.TIME);
+                    var pv_values = data.map(item => item.PV);
+
+                    // ECharts 선형 차트 생성
+                    var myChart2 = echarts.init(document.getElementById('main2'));
+                    var option2 = {
+						title: {
+                            text: '10분 간의 PV 값 변동',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: times  // x축에 시간(TIME) 표시
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [
+                            {
+                                data: pv_values,  // y축에 PV 값 표시
+                                type: 'line'       // 선형 차트
+                            }
+                        ]
+                    };
+                    myChart2.setOption(option2);
+                },
+                error: function(xhr, status, error) {
+                    console.log("최근 데이터 요청 중 오류 발생: " + error);
+                }
+            });
+
+            // 원형 차트 (전체 데이터)
+            $.ajax({
+                url: 'http://localhost:3000/api/all',  // 전체 데이터 요청
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // 전체 데이터에서 PV 값 추출
+                    var pv_values = data.map(item => item.PV);
+
+                    // 데이터 값의 분포를 1단위로 나누어 비율 계산하기
+                    var valueCounts = {};
+                    pv_values.forEach(value => {
+                        valueCounts[value] = (valueCounts[value] || 0) + 1;
+                    });
+
+                    // 차트에서 사용할 수 있도록 데이터 형태 변환
+                    var pieData = [];
+                    var totalCount = pv_values.length;
+
+                    for (var value in valueCounts) {
+                        var percentage = (valueCounts[value] / totalCount * 100).toFixed(2);
+                        pieData.push({ name: value, value: valueCounts[value], percentage: percentage + "%" });
+                    }
+
+                    // 원형 차트 생성
+                    var myChart3 = echarts.init(document.getElementById('main3'));
+                    var option3 = {
+                        title: {
+                            text: 'PV 값의 분포',
+                            subtext: '전체 데이터 분포',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{b}: {c} ({d}%)'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left'
+                        },
+                        series: [
+                            {
+                                name: 'PV 값 분포',
+                                type: 'pie',
+                                radius: '50%',
+                                data: pieData,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    myChart3.setOption(option3);
+                },
+                error: function(xhr, status, error) {
+                    console.log("전체 데이터 요청 중 오류 발생: " + error);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
